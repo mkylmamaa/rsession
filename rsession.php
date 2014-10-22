@@ -1,7 +1,5 @@
 <?php
 
-// predis must be already included
-
 class RedisSessionHandler implements SessionHandlerInterface
 {
     public $ttl = ini_get('session.gc_maxlifetime');
@@ -45,10 +43,11 @@ class RedisSessionHandler implements SessionHandlerInterface
     }
 }
 
-$db_redis = new PredisClient();
-$sessHandler = new RedisSessionHandler($db_redis);
-
-session_set_save_handler($sessHandler);
-session_start();
+function rsession_start($predis_client)
+{
+	$sessHandler = new RedisSessionHandler($predis_client);
+	session_set_save_handler($sessHandler);
+	session_start();
+}
 
 ?>
